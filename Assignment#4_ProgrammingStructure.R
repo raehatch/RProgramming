@@ -1,7 +1,6 @@
 #install.packages("reshape")
 library(reshape)
 library(ggplot2)
-library(gridExtra)
 
 #Generate individual data points
 freq <- c(0.6,0.3,0.4,0.4,0.2,0.6,0.3,0.4,0.9,0.2)
@@ -23,22 +22,13 @@ dfNew <- melt(df,id ="bp",measure.vars = c('first','second','final'))
 dfNew$level <- ifelse(dfNew$value==1, "High","Low")
 
 #A: Create a boxplot
-boxplot <- ggplot(dfNew,aes(x=variable,y=bp,fill=level)) + 
+ggplot(dfNew,aes(x=variable,y=bp,fill=level)) + 
   geom_boxplot() +
   ylab("Blood Pressure") +
   xlab("Asessment Visit") +
   ggtitle("Blood Presure by Visit")
   
 #B: Create a histogram
-histo <- ggplot(df,aes(bp)) + 
-  geom_histogram(bins=9,color="steelblue",fill="white") +
-  xlab("Blood Pressure") +
-  ggtitle("Blood Pressure Histogram")
-
-#View visualizations
-grid.arrange(boxplot,histo,
-             ncol=2,
-             nrow=1)
-
+hist(df$bp,main="Blood Pressure Histogram")
 
 
