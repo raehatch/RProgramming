@@ -1,0 +1,65 @@
+---
+title: "Module # 12 Markdown"
+author: "Rachel Hatcherian"
+date: "4/2/2021"
+output:
+  html_document:
+    theme: yeti
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Income and Expenditures by Year Analysis
+
+### Load libraries
+
+###### Lattice and ggplot2 are used for data visualization, reshape2 is used for reshaping data.tables
+
+```{r, "Library Setup", warning=FALSE}
+
+# Load libraries
+library(lattice)
+library(ggplot2)
+library(reshape2)
+
+```
+
+### Read in and cleanse data to prepare for visualization
+
+```{r, "Data Import and Cleansing"}
+
+# Data import and cleansing
+df <- read.csv("USConsump1993.csv")
+df$Year <- as.Date(ISOdate(df$Year, 1, 1)) # Convert year to date format
+names(df) <- tolower(names(df)) # make headers lowercase
+dfMelt <- melt(df,id.vars="year") #melt data
+
+```
+
+### Create trending line graph using ggplot
+
+```{r, "GGPLOT"}
+
+# ggplot graph
+ggplot(dfMelt,aes(x=year,y=value)) + 
+  geom_line(aes(color=variable)) +
+  ggtitle("Income and Expenditures by Year (ggplot)")
+
+```
+
+### Create same line graph but using Lattice package instead
+
+```{r, "LATTICE"}
+
+# lattice line
+xyplot(income + expenditure ~ year,
+       data=df,
+       col=c("#cc0000", "#0073e6"),
+       type=c("l","g"),
+       main="Income and Expenditures by Year (Lattice)")
+
+
+```
+
